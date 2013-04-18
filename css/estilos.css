@@ -1,0 +1,120 @@
+body{
+    background-color: hsl(203, 100%, 94%);
+}
+header{
+    width: 80%;
+    background-color: hsl(240, 3%, 93%);
+    border: solid 0.1em;
+    border-radius: 20px;
+    -webkit-box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);        
+    -moz-box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);
+    -ms-box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);
+    box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);
+    display: inline-block;
+    text-align: center;
+    margin-left: 10%;
+}
+header div{    	
+    width: 100%;        
+    text-align: center;
+    font-color:red;
+
+}
+
+footer{
+    font-size: 0.7em;
+}
+#login{
+
+    display: inline-block;
+    width: 30%;
+    padding-right: 0.4em;
+    padding-left: 0.4em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border: solid 3px;	
+    margin-left: 35%;
+    margin-top: 0.5em;
+    -webkit-border-radius: 20px;    
+    -moz.border-radius: 20px;
+    -ms-border-radius: 20px;    
+    border-radius: 20px;
+    -webkit-box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);        
+    -moz-box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);
+    -ms-box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);
+    box-shadow:  3px 2px 3px 2px hsl(0, 0%, 0%);
+}
+#cinta{
+    display: inline-block;
+    width: 15%;
+    height: 2em;
+    margin-left: 43%;
+    margin-top: 5%;
+    text-align: center;
+    font-size: 1.5em;
+}
+#enviar{
+    width: 50%;
+    margin-left: 25%; 
+}
+#enviar2{
+    width: 50%;
+    margin-left: 25%;
+}
+#error{
+    text-shadow: 2px 2px 1px rgb(72, 72, 72);        
+    text-align: center;
+    color: red;
+}
+#logo {
+
+    text-align: center;
+    display: inline-block;
+    margin-bottom:  10px;
+}
+#combobox{
+    width: 70%;
+}
+#boton{
+    width: 30%;
+}
+#titulo{
+    text-align: center;
+    color: rgb(109, 167, 213);    
+    font-size: 1.5em;
+    
+}
+#titulo_medio{
+    text-align: center;
+    color: rgb(109, 167, 213);    
+    font-size: 2em;
+    padding-left: 35%;
+}
+#pie{
+   padding-left: 5%;
+}
+#pie2{
+   padding-left: 45%;
+}
+.formulario{
+    padding: 2em;
+    width: 30%;
+    height: 20%;
+    margin-left: 33%;
+    display: block;
+    border: solid 2px;
+
+}
+.formulario_ex{
+    padding: 2em;
+    width: 40%;
+    height: 20%;
+    margin-left: 25%;
+    display: block;
+    border: solid 2px;
+
+}
+.centro{
+    text-align: center;
+}
+
