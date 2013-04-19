@@ -210,7 +210,7 @@
                                             echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                             echo "</a>";
                                             $flag = $fila['id'];
-                                            echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                             echo "</li>";
                                             echo "<li data-role='list-divider'></li>";
                                             $identificador_tema = $fila['nombre_tema'];
@@ -223,7 +223,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -236,7 +236,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -282,7 +282,7 @@
                                             echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                             echo "</a>";
                                             $flag = $fila['id'];
-                                            echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                             echo "</li>";
                                             echo "<li data-role='list-divider'></li>";
                                             $identificador_tema = $fila['nombre_tema'];
@@ -295,7 +295,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -308,7 +308,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -353,7 +353,7 @@
                                             echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                             echo "</a>";
                                             $flag = $fila['id'];
-                                            echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                             echo "</li>";
                                             echo "<li data-role='list-divider'></li>";
                                             $identificador_tema = $fila['nombre_tema'];
@@ -366,7 +366,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -379,7 +379,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -424,7 +424,7 @@
                                             echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                             echo "</a>";
                                             $flag = $fila['id'];
-                                            echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                             echo "</li>";
                                             echo "<li data-role='list-divider'></li>";
                                             $identificador_tema = $fila['nombre_tema'];
@@ -437,7 +437,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
@@ -450,7 +450,7 @@
                                                 echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
                                                 echo "</li>";
                                                 echo "<li data-role='list-divider'></li>";
                                                 $identificador_tema = $fila['nombre_tema'];
