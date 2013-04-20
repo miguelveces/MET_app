@@ -42,10 +42,11 @@
                     ' activo = '.$activa.', frase_traducida = \''.$traduccion.'\' WHERE id='.$bandera.';';
             $meter = @mysql_query($update);
             if ($meter) {
-                echo $update;
-                //echo '<script>  alert("Se insertaron los registros con exito");window.location="../../principal.php"</script>';
+                //echo $update;
+                echo '<script>  alert("Se insertaron los registros con exito");window.location="../../principal.php"</script>';
             } else {
-                echo 'Hubo un error en al intentar registrar los campos.';
+                
+                echo '<script>  alert("Hubo un error en al intentar registrar los campos.");window.location="../../principal.php"</script>';
                 echo $insert;
             }
        // } else {

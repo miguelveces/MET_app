@@ -76,7 +76,7 @@
                                     echo "</div>";
                                     echo "</li>";
                                     echo " <div id=\"enviar2\">";
-                                    echo " <input type=\"submit\" onclick = \"this.form.action = 'scripts/update/editar_frases.php'\" value=\"Actualizar\" onsubmit=\"validar_frase()\" />";
+                                    echo " <input type=\"submit\" onclick = \"this.form.action = 'scripts/update/editar_vocabulario.php'\" value=\"Actualizar\" onsubmit=\"validar_frase()\" />";
                                     echo " <label name=\"mensaje\" />";
                                     echo "</div>";
                                     echo "</li>";
