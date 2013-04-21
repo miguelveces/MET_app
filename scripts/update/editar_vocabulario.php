@@ -21,8 +21,13 @@
 //Recibir                       
         $palabra = strip_tags($_POST['palabra']);
         $bandera = strip_tags($_POST['banda']);        
-        $traduccion = strip_tags($_POST['palabraT']);                                                   
-            $update = 'UPDATE mylittlemagicbook.vocabularios  SET  palabra = \''.$palabra.'\', '.
+        $traduccion = strip_tags($_POST['palabraT']);  
+//        //desarrollo
+//            $update = 'UPDATE mylittlemagicbook.vocabularios  SET  palabra = \''.$palabra.'\', '.
+//                    ' traduccion = \''.$traduccion.'\', fecha_modificacion = sysdate()'.
+//                    ' WHERE id='.$bandera.';';
+            //Produccion
+            $update = 'UPDATE metapp.vocabularios  SET  palabra = \''.$palabra.'\', '.
                     ' traduccion = \''.$traduccion.'\', fecha_modificacion = sysdate()'.
                     ' WHERE id='.$bandera.';';
             $meter = @mysql_query($update);

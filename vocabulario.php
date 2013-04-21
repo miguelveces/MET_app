@@ -26,7 +26,7 @@
                     <ul>
                         <li><a href="principal.php">Inicio</a></li>
                         <li><a href="vocabulario.php"  class="ui-btn-active">Tema / Vocabulario</a></li>
-                        <li><a href="examen.php">Crear temas de quiz</a></li>
+                       <li><a href="examen.php">Crear temas de quiz</a></li>
                         <li><a href="descargas.php">Demo</a></li> 
                         <li><a href="scripts/cerrar_sesion.php">cerrar sesion</a></li>
                     </ul>
@@ -175,8 +175,7 @@
                         </ul>
                     </div>                            
                 </div>
-                <!-- aqui va el pie del bocabulario -->
-
+				  <!-- aqui va el pie del bocabulario -->
                 <div data-role="collapsible-set">
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>Spanish - English | Palabras de Vocabulario</h3>
@@ -186,7 +185,7 @@
                             if (!$conexion) {
                                 die('No se puede conectar: ' . mysql_error());
                             }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 4 order by a.id_tema, a.fecha_modificacion desc";
+                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 8 order by a.id_tema, a.fecha_modificacion desc";
                             $result = @mysql_query($sql, $conexion);
                             $num_rows = mysql_num_rows($result);
                             $contador = 0;
@@ -220,7 +219,7 @@
                                                 echo "<a href='#'>";
                                                 echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -231,9 +230,9 @@
                                                 echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
                                                 echo "<li>";
                                                 echo "<a href='#'>";
-                                                echo "<h3>" . $fila['paabra'] . "</h3>";
+                                                echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -258,7 +257,7 @@
                             if (!$conexion) {
                                 die('No se puede conectar: ' . mysql_error());
                             }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 1 order by a.id_tema, a.fecha_modificacion desc";
+                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 5 order by a.id_tema, a.fecha_modificacion desc";
                             $result = @mysql_query($sql, $conexion);
                             $num_rows = mysql_num_rows($result);
                             $contador = 0;
@@ -292,7 +291,7 @@
                                                 echo "<a href='#'>";
                                                 echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -303,9 +302,9 @@
                                                 echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
                                                 echo "<li>";
                                                 echo "<a href='#'>";
-                                                echo "<h3>" . $fila['paabra'] . "</h3>";
+                                                echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -329,7 +328,7 @@
                             if (!$conexion) {
                                 die('No se puede conectar: ' . mysql_error());
                             }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 2 order by a.id_tema, a.fecha_modificacion desc";
+                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 6 order by a.id_tema, a.fecha_modificacion desc";
                             $result = @mysql_query($sql, $conexion);
                             $num_rows = mysql_num_rows($result);
                             $contador = 0;
@@ -363,7 +362,7 @@
                                                 echo "<a href='#'>";
                                                 echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -374,9 +373,9 @@
                                                 echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
                                                 echo "<li>";
                                                 echo "<a href='#'>";
-                                                echo "<h3>" . $fila['paabra'] . "</h3>";
+                                                echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -401,7 +400,7 @@
                             if (!$conexion) {
                                 die('No se puede conectar: ' . mysql_error());
                             }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 3 order by a.id_tema, a.fecha_modificacion desc";
+                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 7 order by a.id_tema, a.fecha_modificacion desc";
                             $result = @mysql_query($sql, $conexion);
                             $num_rows = mysql_num_rows($result);
                             $contador = 0;
@@ -434,7 +433,7 @@
                                                 echo "<a href='#'>";
                                                 echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
@@ -445,9 +444,9 @@
                                                 echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
                                                 echo "<li>";
                                                 echo "<a href='#'>";
-                                                echo "<h3>" . $fila['paabra'] . "</h3>";
+                                                echo "<h3>" . $fila['palabra'] . "</h3>";
                                                 echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "</strong></p>";
+                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
                                                 echo "</a>";
                                                 $flag = $fila['id'];
                                                 echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
