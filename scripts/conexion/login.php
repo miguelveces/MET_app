@@ -15,31 +15,34 @@
 <body>
 
 <?php
-//session_start();
-require_once('funciones.php');
-//conectar('68.178.140.218', 'metapp', 'mike28veceS@', 'metapp');
-conectar('localhost', 'root', '', 'mylittlemagicbook');
-
-//Recibir
+/* Incluimos el fichero de la de cnexion a base de dats */
+require '../NuevaConexion/ConexionDB.php';
+/* Incluimos el fichero de la clase Conf */
+require '../NuevaConexion/Conf.php';
 $user = strip_tags($_POST['user']);
-//$pass = strip_tags(sha1($_POST['pass']));
 $pass = strip_tags($_POST['pwd']);
+/* Creamos la instancia del objeto. Ya estamos conectados */
+$conexiondb = ConexionDB::getInstance();
 
 //origuinal $query = @mysql_query('SELECT * FROM tutorial1_usuarios WHERE user="'.mysql_real_escape_string($user).'" AND pass="'.mysql_real_escape_string($pass).'"');
-// segunda
-$consulta  = "select nombre_usuario from usuarios where usuario = '".mysql_real_escape_string($user)."' and password = '".mysql_real_escape_string($pass)."';";
-$query = @mysql_query($consulta);
+$consulta  = "select nombre_usuario from usuarios where nombre_usuario = '".$user."' and password = '".$pass."';";
+/* Ejecutamos la query */
+$stmt = $conexiondb->ejecutar($consulta);
 
-if($existe = @mysql_fetch_object($query))
-{
-	$_SESSION['logged'] = 'yes';
+if ($stmt === FALSE) {
+    echo 'El usuario y/o pass son incorrectos.';	
+    echo $consulta;
+    
+     
+} else {
+    // as of php 5.4 mysqli_result implements Traversable, so you can use it with foreach
+    foreach ($stmt as $row) {
+        echo $row["nombre_usuario"] . '<br />';
+    }
+    $_SESSION['logged'] = 'yes';
 	$_SESSION['user'] = $user;
 	//echo $consulta;
         echo '<script>window.location="../../principal.php"</script>';
-     
-}else{
-	echo 'El usuario y/o pass son incorrectos.';	
-        echo $consulta;
 }
 ?>
 </body>

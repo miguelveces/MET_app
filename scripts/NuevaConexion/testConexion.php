@@ -5,7 +5,7 @@
  *
  * @author admin
  */
-/* Incluimos el fichero de la clase Db */
+/* Incluimos el fichero de la de cnexion a base de dats */
 require 'ConexionDB.php';
 /* Incluimos el fichero de la clase Conf */
 require 'Conf.php';
