@@ -26,7 +26,7 @@
                     <ul>
                         <li><a href="principal.php">Inicio</a></li>
                         <li><a href="vocabulario.php"  class="ui-btn-active">Tema / Vocabulario</a></li>
-                       <li><a href="examen.php">Crear temas de quiz</a></li>
+                        <li><a href="examen.php">Crear temas de quiz</a></li>
                         <li><a href="descargas.php">Demo</a></li> 
                         <li><a href="scripts/cerrar_sesion.php">cerrar sesion</a></li>
                     </ul>
@@ -45,17 +45,22 @@
                                         <li data-role="fieldcontain">
                                             <label for="select-choice-a" class="select">Escoja el Libro:</label>
                                             <?php
-                                            include "scripts/conexion/conexion.php";
-                                            if (!$conexion) {
-                                                die('No se puede conectar: ' . mysql_error());
-                                            }
+                                            /* Incluimos el fichero de la de cnexion a base de dats */
+                                            require 'scripts/NuevaConexion/ConexionDB.php';
+                                            /* Incluimos el fichero de la clase Conf */
+                                            require 'scripts/NuevaConexion/Conf.php';
+
+                                            /* Creamos la instancia del objeto. Ya estamos conectados */
+                                            $bd = ConexionDB::getInstance();
                                             $sql = "select id, nombre_libro from libros";
-                                            $result = @mysql_query($sql, $conexion);
-                                            if (!$result) {
+                                            $result = $bd->ejecutar($sql);
+
+                                            if ($result === FALSE) {
                                                 echo " fallo al momento de hacer la consulta";
                                             } else {
                                                 echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                                while ($fila = mysql_fetch_array($result)) {
+                                                foreach ($result as $fila) {
+                                                    // while ($fila = mysql_fetch_array($result)) {
                                                     echo "<option value='" . $fila['id'] . "'>", $fila['nombre_libro'], "</option>";
                                                 }
                                                 echo "</select>";
@@ -94,17 +99,13 @@
                                 <form data-ajax="false"  method="POST" enctype="multipart/form-data">                                                                
                                     <ul data-role="listview">
                                         <?php
-                                        include "scripts/conexion/conexion.php";
-                                        if (!$conexion) {
-                                            die('No se puede conectar: ' . mysql_error());
-                                        }
+                                        /* Incluimos el fichero de la de cnexion a base de dats */
+                                        //require 'scripts/NuevaConexion/ConexionDB.php';
+                                        /* Incluimos el fichero de la clase Conf */
+                                        //require 'scripts/NuevaConexion/Conf.php';
 
-                                        error_reporting(E_ERROR | E_WARNING | E_PARSE);
-                                        // Conexión a la BD
-                                        // Obtener el $id_padre del envio a si mismo del formulario ..
-                                        $id_padre = $_POST['id_padre'];
-
-
+                                        /* Creamos la instancia del objeto. Ya estamos conectados */
+                                        $bd2 = ConexionDB::getInstance();
 
                                         // Inicio Formulario .. PHP_SELF enviamos a si mismo (a este script).
                                         //echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"POST\">\n\n";
@@ -115,20 +116,25 @@
                                         echo "<option value=\"\"> Seleccione un Libro </option>\n";
 
                                         $SQLconsulta_padre = "select id, nombre_libro from libros";
-                                        $consulta_padre = mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
-
-                                        While ($registro_padre = mysql_fetch_assoc($consulta_padre)) {
-                                            // Se mira si el ID del registro es el mismo q el $id_padre q recibimos si hemos cambiado el select hijo.
-                                            // Se selecciona en consecuencia (selected) la opción elegida.
-                                            if ($id_padre == $registro_padre['id']) {
-                                                echo "<option value=\"" . $registro_padre['id'] . "\" selected>" . $registro_padre['nombre_libro'] . "</option>\n";
-                                            } else {
-                                                echo "<option value=\"" . $registro_padre['id'] . "\">" . $registro_padre['nombre_libro'] . "</option>\n";
+                                        $consulta_padre = $bd2->ejecutar($SQLconsulta_padre); //mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
+                                         $id_padre = $_POST['id_padre'];
+                                        if ($consulta_padre === FALSE) {
+                                            
+                                            mysqli_error($mysqli);
+                                        } else {
+                                            foreach ($consulta_padre as $registro_padre) {
+                                                
+                                                if ($id_padre == $registro_padre['id']) {
+                                                    echo "<option value=\"" . $registro_padre['id'] . "\" selected>" . $registro_padre['nombre_libro'] . "</option>\n";
+                                                } else {
+                                                    echo "<option value=\"" . $registro_padre['id'] . "\">" . $registro_padre['nombre_libro'] . "</option>\n";
+                                                }
                                             }
                                         }
+
                                         echo "</select>\n\n";
                                         echo "</li>";
-                                        mysql_free_result($consulta_padre); // Liberar memoria usada por consulta.
+                                        mysqli_free_result($consulta_padre); // Liberar memoria usada por consulta.
                                         // Formar Select "Hijo"
                                         echo " <li data-role=\"fieldcontain\">\n";
                                         echo " <label for=\"id_hija\" class=\"select\">Escoja el tema:</label>\n";
@@ -139,15 +145,20 @@
                                         if (!empty($id_padre)) {
 
                                             $SQLconsulta_hija = "select id, nombre_tema from temas where libro_id = '$id_padre' order by 2";
-                                            $consulta_hija = mysql_query($SQLconsulta_hija, $conexion) or die(mysql_error());
+                                            $consulta_hija = $bd2->ejecutar($SQLconsulta_hija);//mysql_query($SQLconsulta_hija, $conexion) or die(mysql_error());
                                             // se mira el total de registros de la consulta .. si es 0 se muestra mensaje en el select ..
-                                            if (mysql_num_rows($consulta_hija) != 0) {
-                                                While ($registro_hija = mysql_fetch_assoc($consulta_hija)) {
-                                                    echo "<option value=\"" . $registro_hija['id'] . "\">" . $registro_hija['nombre_tema'] . "</option>\n";
+                                            if ($consulta_hija === FALSE) {
+                                                mysqli_error($mysqli);
+                                                echo "<option value=\"\"> No existe un tema relacionado </option>";
+                                                }               
+                                                else {
+                                                    foreach ($consulta_hija as $registro_hija) {
+                                                        echo "<option value=\"" . $registro_hija['id'] . "\">" . $registro_hija['nombre_tema'] . "</option>\n";
+                                                    }
                                                 }
-                                            } else {
-                                                echo "<option value=\"\"> No hay temas registrados para este libro </option>";
-                                            }
+                                            
+                                            
+                                                
                                         } else {
                                             echo "<option value=\"\"> <-- Seleccione un tema  </option>";
                                         }
@@ -175,291 +186,289 @@
                         </ul>
                     </div>                            
                 </div>
-				  <!-- aqui va el pie del bocabulario -->
+                <!-- aqui va el pie del bocabulario -->
                 <div data-role="collapsible-set">
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>Spanish - English | Palabras de Vocabulario</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">
-                            <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 8 order by a.id_tema, a.fecha_modificacion desc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
-                            $contador = 0;
-                            $identificador_tema = "";
-                            if (!$result) {
-                                echo " fallo al momento de hacer la consulta";
-                            } else {
+<?php
+$bd3 = ConexionDB::getInstance();
+ 
+$sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 8 order by a.id_tema, a.fecha_modificacion desc";
+$result = $bd3->ejecutar($sql);//@mysql_query($sql, $conexion);
+$num_rows = mysqli_num_rows($result);
+$contador = 0;
+$identificador_tema = "";
+if (!$result) {
+    echo " fallo al momento de hacer la consulta";
+} else {
 
 
-                                #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
-                                    if ($contador == $num_rows) {
-                                        echo "<li data-role='list-divider'></li>";
-                                    } else {
-                                        if (empty($identificador_tema)) {
-                                            echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                            echo "<li>";
-                                            echo "<a href='#'>";
-                                            echo "<h3>" . $fila['palabra'] . "</h3>";
-                                            echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                            echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                            echo "</a>";
-                                            $flag = $fila['id'];
-                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                            echo "</li>";
-                                            echo "<li data-role='list-divider'></li>";
-                                            $identificador_tema = $fila['nombre_tema'];
-                                        } else {
-                                            if ($identificador_tema == $fila['nombre_tema']) {
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            } else {
-                                                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+    #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
+    while ($fila = mysql_fetch_array($result)) {
+        if ($contador == $num_rows) {
+            echo "<li data-role='list-divider'></li>";
+        } else {
+            if (empty($identificador_tema)) {
+                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                echo "<li>";
+                echo "<a href='#'>";
+                echo "<h3>" . $fila['palabra'] . "</h3>";
+                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                echo "</a>";
+                $flag = $fila['id'];
+                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                echo "</li>";
+                echo "<li data-role='list-divider'></li>";
+                $identificador_tema = $fila['nombre_tema'];
+            } else {
+                if ($identificador_tema == $fila['nombre_tema']) {
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                } else {
+                    echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                }
+            }
+        }
+    }
+}
 
-                            include "scripts/conexion/cerrar_conexion.php";
-                            ?>
+include "scripts/conexion/cerrar_conexion.php";
+?>
                         </ul>
                     </div>
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>English - Spanich | Palabras de Vocabulario</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">
-                            <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 5 order by a.id_tema, a.fecha_modificacion desc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
-                            $contador = 0;
-                            $identificador_tema = "";
-                            if (!$result) {
-                                echo " fallo al momento de hacer la consulta";
-                            } else {
+<?php
+include "scripts/conexion/conexion.php";
+if (!$conexion) {
+    die('No se puede conectar: ' . mysql_error());
+}
+$sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 5 order by a.id_tema, a.fecha_modificacion desc";
+$result = @mysql_query($sql, $conexion);
+$num_rows = mysql_num_rows($result);
+$contador = 0;
+$identificador_tema = "";
+if (!$result) {
+    echo " fallo al momento de hacer la consulta";
+} else {
 
 
-                                #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
-                                    if ($contador == $num_rows) {
-                                        echo "<li data-role='list-divider'></li>";
-                                    } else {
-                                        if (empty($identificador_tema)) {
-                                            echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                            echo "<li>";
-                                            echo "<a href='#'>";
-                                            echo "<h3>" . $fila['palabra'] . "</h3>";
-                                            echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                            echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                            echo "</a>";
-                                            $flag = $fila['id'];
-                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                            echo "</li>";
-                                            echo "<li data-role='list-divider'></li>";
-                                            $identificador_tema = $fila['nombre_tema'];
-                                        } else {
-                                            if ($identificador_tema == $fila['nombre_tema']) {
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            } else {
-                                                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            include "scripts/conexion/cerrar_conexion.php";
-                            ?>                     
+    #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
+    while ($fila = mysql_fetch_array($result)) {
+        if ($contador == $num_rows) {
+            echo "<li data-role='list-divider'></li>";
+        } else {
+            if (empty($identificador_tema)) {
+                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                echo "<li>";
+                echo "<a href='#'>";
+                echo "<h3>" . $fila['palabra'] . "</h3>";
+                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                echo "</a>";
+                $flag = $fila['id'];
+                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                echo "</li>";
+                echo "<li data-role='list-divider'></li>";
+                $identificador_tema = $fila['nombre_tema'];
+            } else {
+                if ($identificador_tema == $fila['nombre_tema']) {
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                } else {
+                    echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                }
+            }
+        }
+    }
+}
+include "scripts/conexion/cerrar_conexion.php";
+?>                     
                         </ul>                  
                     </div>  
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>Chinese - English  | Palabras de Vocabulario</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">                      
-                            <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 6 order by a.id_tema, a.fecha_modificacion desc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
-                            $contador = 0;
-                            $identificador_tema = "";
-                            if (!$result) {
-                                echo " fallo al momento de hacer la consulta";
-                            } else {
+<?php
+include "scripts/conexion/conexion.php";
+if (!$conexion) {
+    die('No se puede conectar: ' . mysql_error());
+}
+$sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 6 order by a.id_tema, a.fecha_modificacion desc";
+$result = @mysql_query($sql, $conexion);
+$num_rows = mysql_num_rows($result);
+$contador = 0;
+$identificador_tema = "";
+if (!$result) {
+    echo " fallo al momento de hacer la consulta";
+} else {
 
 
-                                #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
-                                    if ($contador == $num_rows) {
-                                        echo "<li data-role='list-divider'></li>";
-                                    } else {
-                                        if (empty($identificador_tema)) {
-                                            echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                            echo "<li>";
-                                            echo "<a href='#'>";
-                                            echo "<h3>" . $fila['palabra'] . "</h3>";
-                                            echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                            echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                            echo "</a>";
-                                            $flag = $fila['id'];
-                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                            echo "</li>";
-                                            echo "<li data-role='list-divider'></li>";
-                                            $identificador_tema = $fila['nombre_tema'];
-                                        } else {
-                                            if ($identificador_tema == $fila['nombre_tema']) {
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            } else {
-                                                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+    #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
+    while ($fila = mysql_fetch_array($result)) {
+        if ($contador == $num_rows) {
+            echo "<li data-role='list-divider'></li>";
+        } else {
+            if (empty($identificador_tema)) {
+                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                echo "<li>";
+                echo "<a href='#'>";
+                echo "<h3>" . $fila['palabra'] . "</h3>";
+                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                echo "</a>";
+                $flag = $fila['id'];
+                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                echo "</li>";
+                echo "<li data-role='list-divider'></li>";
+                $identificador_tema = $fila['nombre_tema'];
+            } else {
+                if ($identificador_tema == $fila['nombre_tema']) {
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                } else {
+                    echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                }
+            }
+        }
+    }
+}
 
-                            include "scripts/conexion/cerrar_conexion.php";
-                            ?>                     
+include "scripts/conexion/cerrar_conexion.php";
+?>                     
                         </ul>
                     </div>                           
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>Portuguese - English | Palabras de Vocabulario</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">                      
-                            <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 7 order by a.id_tema, a.fecha_modificacion desc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
-                            $contador = 0;
-                            $identificador_tema = "";
-                            if (!$result) {
-                                echo " fallo al momento de hacer la consulta";
-                            } else {
+<?php
+include "scripts/conexion/conexion.php";
+if (!$conexion) {
+    die('No se puede conectar: ' . mysql_error());
+}
+$sql = "select  a.id, b.nombre_tema, a.palabra, a.fecha_modificacion, a.traduccion  from vocabularios a, temas b  where a.id_tema = b.id and a.id_libro = 7 order by a.id_tema, a.fecha_modificacion desc";
+$result = @mysql_query($sql, $conexion);
+$num_rows = mysql_num_rows($result);
+$contador = 0;
+$identificador_tema = "";
+if (!$result) {
+    echo " fallo al momento de hacer la consulta";
+} else {
 
-                                #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
-                                    if ($contador == $num_rows) {
-                                        echo "<li data-role='list-divider'></li>";
-                                    } else {
-                                        if (empty($identificador_tema)) {
-                                            echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                            echo "<li>";
-                                            echo "<a href='#'>";
-                                            echo "<h3>" . $fila['palabra'] . "</h3>";
-                                            echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                            echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                            echo "</a>";
-                                            $flag = $fila['id'];
-                                            echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                            echo "</li>";
-                                            echo "<li data-role='list-divider'></li>";
-                                            $identificador_tema = $fila['nombre_tema'];
-                                        } else {
-                                            if ($identificador_tema == $fila['nombre_tema']) {
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            } else {
-                                                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['palabra'] . "</h3>";
-                                                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            include "scripts/conexion/cerrar_conexion.php";
-                            ?>                     
+    #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
+    while ($fila = mysql_fetch_array($result)) {
+        if ($contador == $num_rows) {
+            echo "<li data-role='list-divider'></li>";
+        } else {
+            if (empty($identificador_tema)) {
+                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                echo "<li>";
+                echo "<a href='#'>";
+                echo "<h3>" . $fila['palabra'] . "</h3>";
+                echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                echo "</a>";
+                $flag = $fila['id'];
+                echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                echo "</li>";
+                echo "<li data-role='list-divider'></li>";
+                $identificador_tema = $fila['nombre_tema'];
+            } else {
+                if ($identificador_tema == $fila['nombre_tema']) {
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                } else {
+                    echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['palabra'] . "</h3>";
+                    echo "<p><strong>" . $fila['traduccion'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['fecha_modificacion'] . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_vocabulario.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                }
+            }
+        }
+    }
+}
+include "scripts/conexion/cerrar_conexion.php";
+?>                     
                         </ul>
                     </div>                           
                 </div>                       

@@ -15,7 +15,13 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
+        require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';
+
+        /* Creamos la instancia del objeto. Ya estamos conectados */
+        $bd = ConexionDB::getInstance();
+        //require_once('../conexion/conexion.php');
 
 
 //Recibir
@@ -23,16 +29,16 @@
         $idioma = 2;
         $tema = strip_tags($_POST['tema']);
         $descripcion = strip_tags($_POST['descripcion']);
-        
-            $insert = "INSERT INTO mylittlemagicbook.temas (libro_id, idioma_id, nombre_tema, descripcion_tema, ultima_fecha)".
-                "VALUES (".$libro.", ".$idioma.", '".$tema."', '".$descripcion."', sysdate());";
 
-            $meter = @mysql_query($insert);
-            if ($meter) {
-                echo '<script>  alert("Se insertaron los datos correctamente");window.location="../../vocabulario.php"</script>';
-            } else {
-              echo '<script>  alert("Error! al insertar datos");window.location="../../vocabulario.php"</script>';
-            }
+        $insert = "INSERT INTO mantenedor.temas (libro_id, idioma_id, nombre_tema, descripcion_tema, ultima_fecha)" .
+                "VALUES (" . $libro . ", " . $idioma . ", '" . $tema . "', '" . $descripcion . "', sysdate());";
+
+        $meter = $bd->ejecutar($insert); //@mysql_query($insert);
+        if ($meter) {
+            echo '<script>  alert("Se insertaron los datos correctamente");window.location="../../vocabulario.php"</script>';
+        } else {
+            echo '<script>  alert("Error! al insertar datos");window.location="../../vocabulario.php"</script>';
+        }
 
 //}
         ?>

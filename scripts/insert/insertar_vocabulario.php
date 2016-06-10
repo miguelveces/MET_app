@@ -15,26 +15,28 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
-
-
-//Recibir
-        $libro = strip_tags($_POST['id_padre']);        
+        /* Incluimos el fichero de la de cnexion a base de dats */
+        require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';
+       
+        //Recibir
+        $libro = strip_tags($_POST['id_padre']);
         $tema = strip_tags($_POST['id_hija']);
         $palabra = strip_tags($_POST['palabra']);
-        $palabraT =strip_tags($_POST['palabraT']);
-        
+        $palabraT = strip_tags($_POST['palabraT']);
+$bd = ConexionDB::getInstance();
 
-            $insert = "INSERT INTO mylittlemagicbook.vocabularios(id_libro, id_tema, palabra, traduccion, fecha_modificacion)".
-                "VALUES (". $libro.", ".$tema.", '". $palabra ."', '".$palabraT."', sysdate());";
+        $insert = "INSERT INTO mantenedor.vocabularios(id_libro, id_tema, palabra, traduccion, fecha_modificacion)" .
+                "VALUES (" . $libro . ", " . $tema . ", '" . $palabra . "', '" . $palabraT . "', sysdate());";
 
-            $meter = @mysql_query($insert);
-            if ($meter) {
-                echo '<script>  alert("Se insertaron los datos correctamente!");window.location="../../vocabulario.php"</script>';
-            } else {
-             echo '<script>  alert("Error! verificar los datos a insertar");window.location="../../vocabulario.php"</script>';
-            }
-       
+        $meter =  $bd->ejecutar($insert);
+        if ($meter) {
+            echo '<script>  alert("Se insertaron los datos correctamente!");window.location="../../vocabulario.php"</script>';
+        } else {
+            echo '<script>  alert("Error! verificar los datos a insertar");window.location="../../vocabulario.php"</script>';
+        }
+
 //}
         ?>
     </body>

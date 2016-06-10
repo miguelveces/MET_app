@@ -25,7 +25,7 @@
         //$fecha = 
               
       
-            $insert = 'INSERT INTO mylittlemagicbook.practica2 '.
+            $insert = 'INSERT INTO mantenedor.practica2 '.
                     '(libro_id, tema_id, acomoda_frase, fecha) '.
                     ' VALUES ('.$libro.', '.$tema.', \''.$frase.'\', sysdate());';
             $meter = @mysql_query($insert);

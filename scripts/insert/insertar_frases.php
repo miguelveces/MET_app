@@ -40,7 +40,7 @@
             move_uploaded_file($_FILES['audio']['tmp_name'], $destino);
             $audio = $destino;
 
-            $insert = 'INSERT INTO mylittlemagicbook.frases(libro_id, idioma_id, tema_id, ' .
+            $insert = 'INSERT INTO mantenedor.frases(libro_id, idioma_id, tema_id, ' .
                     'frase, audio_frase, ultima_fecha, activo, frase_traducida) VALUES (' . $libro . ', ' . $idioma . ' , ' . $tema . ',' .
                     ' \'' . $frase . '\', \'' . $audio . '\', sysdate(), ' . $activa . ', \'' . $traduccion . '\');';
 

@@ -23,8 +23,13 @@ if ($stmt === FALSE) {
      
 } else {
     // as of php 5.4 mysqli_result implements Traversable, so you can use it with foreach
+     $num_rows = mysqli_num_rows($stmt);
+     echo '<br /> veces '.$num_rows;
+     echo '<br /> veces2 ';
     foreach ($stmt as $row) {
         echo $row["nombre_usuario"] . '<br />';
+        
+       
     }
 }
 /* Realizamos un bucle para ir obteniendo los resultados */
