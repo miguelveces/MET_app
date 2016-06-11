@@ -14,7 +14,7 @@
         <script src="jquery/js/jquery.mobile-1.3.0.js"></script>        
     </head>
     <body> 
-       
+
 
         <section id="frases" data-role="page">
             <header>
@@ -42,75 +42,73 @@
                         <div class="formulario_ex">               
                             <h3>Ingresar datos para escojer la mejor respuesta</h3>
                             <ul data-role="listview">
-                            <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-
-                            error_reporting(E_ERROR | E_WARNING | E_PARSE);
-                            // Conexión a la BD
-                            // Obtener el $id_padre del envio a si mismo del formulario ..
-                            $id_padre = $_POST['id_padre'];
+                                <?php
+                                require 'scripts/NuevaConexion/ConexionDB.php';
+                                /* Incluimos el fichero de la clase Conf */
+                                require 'scripts/NuevaConexion/Conf.php';
+                                $bd = ConexionDB::getInstance();
+                                
+                                // Obtener el $id_padre del envio a si mismo del formulario ..
+                               
 
 
 
-                            // Inicio Formulario .. PHP_SELF enviamos a si mismo (a este script).
-                            //echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"POST\">\n\n";
-                            echo " <li data-role=\"fieldcontain\">\n";
-                            echo " <label for=\"id_padre\" class=\"select\">Escoja el Libro:</label>\n";
-                            // Formar Selec "Padre".
-                            echo "<select id=\"id_padre\" name=\"id_padre\" onChange=\"this.form.submit()\">\n";
-                            echo "<option value=\"\"> Seleccione un Libro </option>\n";
+                                // Inicio Formulario .. PHP_SELF enviamos a si mismo (a este script).
+                                //echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"POST\">\n\n";
+                                echo " <li data-role=\"fieldcontain\">\n";
+                                echo " <label for=\"id_padre\" class=\"select\">Escoja el Libro:</label>\n";
+                                // Formar Selec "Padre".
+                                echo "<select id=\"id_padre\" name=\"id_padre\" onChange=\"this.form.submit()\">\n";
+                                echo "<option value=\"\"> Seleccione un Libro </option>\n";
 
-                            $SQLconsulta_padre = "select id, nombre_libro from libros";
-                            $consulta_padre = mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
-
-                            While ($registro_padre = mysql_fetch_assoc($consulta_padre)) {
-                                // Se mira si el ID del registro es el mismo q el $id_padre q recibimos si hemos cambiado el select hijo.
-                                // Se selecciona en consecuencia (selected) la opción elegida.
-                                if ($id_padre == $registro_padre['id']) {
-                                    echo "<option value=\"" . $registro_padre['id'] . "\" selected>" . $registro_padre['nombre_libro'] . "</option>\n";
-                                } else {
-                                    echo "<option value=\"" . $registro_padre['id'] . "\">" . $registro_padre['nombre_libro'] . "</option>\n";
+                                $SQLconsulta_padre = "select id, nombre_libro from libros";
+                                $consulta_padre = $bd->ejecutar($SQLconsulta_padre);//mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
+                                     $id_padre = $_POST['id_padre'];
+                                  foreach ($consulta_padre as $registro_padre){
+                                    // Se mira si el ID del registro es el mismo q el $id_padre q recibimos si hemos cambiado el select hijo.
+                                    // Se selecciona en consecuencia (selected) la opción elegida.
+                                    if ($id_padre == $registro_padre['id']) {
+                                        echo "<option value=\"" . $registro_padre['id'] . "\" selected>" . $registro_padre['nombre_libro'] . "</option>\n";
+                                    } else {
+                                        echo "<option value=\"" . $registro_padre['id'] . "\">" . $registro_padre['nombre_libro'] . "</option>\n";
+                                    }
                                 }
-                            }
-                            echo "</select>\n\n";
-                            echo "</li>";
-                            mysql_free_result($consulta_padre); // Liberar memoria usada por consulta.
-                            // Formar Select "Hijo"
-                            echo " <li data-role=\"fieldcontain\">\n";
-                            echo " <label for=\"id_hija\" class=\"select\">Escoja el tema:</label>\n";
-                            echo "<select id=\"id_hija\" name=\"id_hija\">\n";
+                                echo "</select>\n\n";
+                                echo "</li>";
+                                mysqli_free_result($consulta_padre); // Liberar memoria usada por consulta.
+                                // Formar Select "Hijo"
+                                echo " <li data-role=\"fieldcontain\">\n";
+                                echo " <label for=\"id_hija\" class=\"select\">Escoja el tema:</label>\n";
+                                echo "<select id=\"id_hija\" name=\"id_hija\">\n";
 
-                            // Si $id_padre no tiene valor (caso de que no se ha seleccionado ningua opcion del select hijo
-                            // se muestra el mensaje de "seleccine un item" (del select padre).
-                            if (!empty($id_padre)) {
+                                // Si $id_padre no tiene valor (caso de que no se ha seleccionado ningua opcion del select hijo
+                                // se muestra el mensaje de "seleccine un item" (del select padre).
+                                if (!empty($id_padre)) {
 
-                                $SQLconsulta_hija = "select id, nombre_tema from temas where libro_id = '$id_padre' order by 2";
-                                $consulta_hija = mysql_query($SQLconsulta_hija, $conexion) or die(mysql_error());
-                                // se mira el total de registros de la consulta .. si es 0 se muestra mensaje en el select ..
-                                if (mysql_num_rows($consulta_hija) != 0) {
-                                    While ($registro_hija = mysql_fetch_assoc($consulta_hija)) {
-                                        echo "<option value=\"" . $registro_hija['id'] . "\">" . $registro_hija['nombre_tema'] . "</option>\n";
+                                    $SQLconsulta_hija = "select id, nombre_tema from temas where libro_id = '$id_padre' order by 2";
+                                    $consulta_hija = $bd->ejecutar($SQLconsulta_hija);//mysql_query($SQLconsulta_hija, $conexion) or die(mysql_error());
+                                    // se mira el total de registros de la consulta .. si es 0 se muestra mensaje en el select ..
+                                    if (mysqli_num_rows($consulta_hija) != 0) {
+                                         foreach ($consulta_hija as $registro_hija) {
+                                            echo "<option value=\"" . $registro_hija['id'] . "\">" . $registro_hija['nombre_tema'] . "</option>\n";
+                                        }
+                                    } else {
+                                        echo "<option value=\"\"> No hay temas registrados para este libro </option>";
                                     }
                                 } else {
-                                    echo "<option value=\"\"> No hay temas registrados para este libro </option>";
+                                    echo "<option value=\"\"> Seleccione un tema  </option>";
                                 }
-                            } else {
-                                echo "<option value=\"\"> <-- Seleccione un tema  </option>";
-                            }
-                            mysql_free_result($consulta_hija); // Liberar memoria usada por consulta.
-                            echo "</select>\n\n";
-                            // echo "</form>\n";
-                            echo "</li>";
-                            ?>
+                                mysqli_free_result($consulta_hija); // Liberar memoria usada por consulta.
+                                echo "</select>\n\n";
+                                // echo "</form>\n";
+                                echo "</li>";
+                                ?>
 
-                            
+
                                 <li>
-                                    
-                                        <label for="fr">Pregunta</label>
-                                        <textarea cols="40" rows="8" name="fr" id="fr"></textarea>                                    
+
+                                    <label for="fr">Pregunta</label>
+                                    <textarea cols="40" rows="8" name="fr" id="fr"></textarea>                                    
                                 </li>
                                 <li>
                                     <label>Respuestas: </label>
