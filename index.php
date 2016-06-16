@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>..::Mantenedor My English Time  APP::..</title>   
+    <head>
+        <title>..::Mantenedor My English Time  APP::..</title>   
         <link rel="stylesheet" href="css/estilos.css" />	
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">        
@@ -11,38 +11,48 @@
         <script src="jquery/js/jquery.js"></script>
         <script src="jquery/_assets/js/jquery.mobile.demos.js"></script>
         <script src="jquery/js/jquery.mobile-1.3.0.js"></script> 
-</head>
-<body> 
-    <section id="index" data-role="page" >
-     	<header>
-      		<h1 id="titulo">My Little Magic Book </h1>     		
-	        <div class="logo">
-	          <a href="http://myenglishtime.net/">
-	            <img src="img/LogoMET.png" id="logo" >        
-	          </a>      
-	        </div>    
-     	</header>
-     	
-     	<article data-role="content">
-     	  <form name="frmLogin" action="scripts/conexion/login.php" method="POST">            
-             <h2 id="error"> </h2>
+    </head>
+    <body> 
+        <section id="index" data-role="page" >
+            <header>
+                <h1 id="titulo">My Little Magic Book </h1>     		
+                <div class="logo">
+                    <a href="http://myenglishtime.net/">
+                        <img src="img/LogoMET.png" id="logo" >        
+                    </a>      
+                </div>    
+            </header>
+
+            <article data-role="content">
+                <form name="frmLogin" action="scripts/conexion/login.php" method="POST">            
+                    <h2 id="error"> </h2>
                     <p id="cinta"> <strong>Ingresar</strong></p>   		          
-                      <div data-role="fieldcontain" id="login">
+                    <div data-role="fieldcontain" id="login">
 
-                              <label for="user">Usuario:</label>
-                              <input type="text" name="user" id="user" value="" />
-                              <label for="pwd" >Contraseña:</label>
-                              <input type="password" name="pwd" id="pwd" value="" placeholder="contraseña" />                                                
-                              <p id="enviar">
-                                <input type="submit" name ="iniciar" value="Enviar" data-theme="b"/>                                
-                       </div>  
-              </form>         
-     	</article>
+                        <label for="user">Usuario:</label>
+                        <input type="text" name="user" id="user" value="" />
+                        <label for="pwd" >Contraseña:</label>
+                        <input type="password" name="pwd" id="pwd" value="" placeholder="contraseña" />                                                
+                        <p id="enviar">
+                            <input type="submit" name ="iniciar" value="Enviar" data-theme="b"/>                                
+                    </div>  
+                </form>
+                <?php
+                session_start();
+                
+                if (isset($_SESSION['logged'])) {
+                    echo "La sesión existe ..." . $_SESSION['logged'];
+                }
+                else {
+                   echo "no existeeee ...";
+               }
+                ?>
+            </article>
 
-        <footer data-role="footer" data-theme="c" data-position="fixed"
-                data-fullscreen="true">
-            <p id="pie2">&copy; 2013 My English time by <a id="pie" href="#">FDSystems.com</a></p>
-        </footer><!-- /footer -->
-    </section>
-      </body> 
-  </html> 
+            <footer data-role="footer" data-theme="c" data-position="fixed"
+                    data-fullscreen="true">
+                <p id="pie2">&copy; 2013 My English time by <a id="pie" href="#">FDSystems.com</a></p>
+            </footer><!-- /footer -->
+        </section>
+    </body> 
+</html> 

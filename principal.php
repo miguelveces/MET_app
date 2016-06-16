@@ -45,6 +45,16 @@
                         <ul data-role="listview">
 
                             <?php
+                            //Inicio la sesión
+                            session_start();
+                            //COMPRUEBA QUE EL USUARIO ESTA AUTENTICADO
+                            if ($_SESSION["logged"] != "yes") {
+                                //si no existe, va a la página de autenticacion
+                                  echo '<script>window.location="index.php"</script>';
+                                 //salimos de este script
+                                exit();
+                            }
+
                             /* Incluimos el fichero de la de cnexion a base de dats */
                             require 'scripts/NuevaConexion/ConexionDB.php';
                             /* Incluimos el fichero de la clase Conf */
@@ -71,7 +81,7 @@
                                     // Se mira si el ID del registro es el mismo q el $id_padre q recibimos si hemos cambiado el select hijo.
                                     // Se selecciona en consecuencia (selected) la opción elegida.
                                     if ($id_padre == $row['id']) {
-                                        echo "<option value=\"" . $row['id'] . "\" selected>" . $row['nombre_libro'] . "</option>\n";
+                                        echo "<option value=\"" . $user . $row['id'] . "\" selected>" . $row['nombre_libro'] . "</option>\n";
                                     } else {
                                         echo "<option value=\"" . $row['id'] . "\">" . $row['nombre_libro'] . "</option>\n";
                                     }
@@ -80,7 +90,7 @@
                             echo "</select>\n\n";
                             echo "</li>";
                             mysqli_free_result($stmt); // Liberar memoria usada por consulta.
-                            
+
                             echo " <li data-role=\"fieldcontain\">\n";
                             echo " <label for=\"id_hija\" class=\"select\">Escoja el tema:</label>\n";
                             echo "<select id=\"id_hija\" name=\"id_hija\">\n";
@@ -163,9 +173,9 @@
 
                             $temas_resultados = $bd->ejecutar($SQLconsulta_temas);
 
- 
+
                             if ($temas_resultados === FALSE) {
-                               
+
                                 echo " fallo al momento de hacer la consulta";
                             } else {
                                 #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
@@ -234,8 +244,6 @@
                         <h3>English - Spanich</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">
                             <?php
-                             
-                            
                             $sql8 = "select a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 1 order by a.tema_id, a.ultima_fecha asc";
                             $result = $bd->ejecutar($sql8);
                             $num_rows = mysqli_num_rows($result);
@@ -245,9 +253,9 @@
                                 echo " fallo al momento de hacer la consulta";
                             } else {
                                 #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                               foreach ($result as $fila) {
-                                        
-                                    } {
+                                foreach ($result as $fila) {
+                                    
+                                } {
                                     if ($contador == $num_rows) {
                                         echo "<li data-role='list-divider'></li>";
                                     } else {
@@ -300,88 +308,84 @@
                                     }
                                 }
                             }
-                            
                             ?>                     
                         </ul>                  
                     </div>  
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>Chinese - English</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">                      
-                            <?php
-                            
-                            $sql = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 2 order by a.tema_id, a.ultima_fecha asc";
-                            $result = $bd->ejecutar($sql);
-                            $num_rows = mysqli_num_rows($result);
-                            $contador = 0;
-                            $identificador_tema = "";
-                            if (!$result) {
-                                echo " fallo al momento de hacer la consulta";
-                            } else {
-                                #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                foreach ($result as $fila) {
-                                        
-                                    } {
-                                    if ($contador == $num_rows) {
-                                        echo "<li data-role='list-divider'></li>";
-                                    } else {
-                                        if ($fila['activo'] == 1) {
-                                            $activo = "Activado";
-                                        } else {
-                                            $activo = "Desactivado";
-                                        }
-                                        if (empty($identificador_tema)) {
-                                            echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                            echo "<li>";
-                                            echo "<a href='#'>";
-                                            echo "<h3>" . $fila['frase'] . "</h3>";
-                                            echo "<p><strong>" . $fila['frase_traducida'] . "</strong></p>";
-                                            echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "  | El tema se encuentra " . $activo . "</strong></p>";
-                                            echo "</a>";
-                                            $flag = $fila['id'];
-                                            echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
-                                            echo "</li>";
-                                            echo "<li data-role='list-divider'></li>";
-                                            $identificador_tema = $fila['nombre_tema'];
-                                        } else {
-                                            if ($identificador_tema == $fila['nombre_tema']) {
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['frase'] . "</h3>";
-                                                echo "<p><strong>" . $fila['frase_traducida'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "  | El tema se encuetra " . $activo . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            } else {
-                                                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
-                                                echo "<li>";
-                                                echo "<a href='#'>";
-                                                echo "<h3>" . $fila['frase'] . "</h3>";
-                                                echo "<p><strong>" . $fila['frase_traducida'] . "</strong></p>";
-                                                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "  | El tema se encuetra " . $activo . "</strong></p>";
-                                                echo "</a>";
-                                                $flag = $fila['id'];
-                                                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
-                                                echo "</li>";
-                                                echo "<li data-role='list-divider'></li>";
-                                                $identificador_tema = $fila['nombre_tema'];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            ?>                     
+<?php
+$sql = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 2 order by a.tema_id, a.ultima_fecha asc";
+$result = $bd->ejecutar($sql);
+$num_rows = mysqli_num_rows($result);
+$contador = 0;
+$identificador_tema = "";
+if (!$result) {
+    echo " fallo al momento de hacer la consulta";
+} else {
+    #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
+    foreach ($result as $fila) {
+        
+    } {
+        if ($contador == $num_rows) {
+            echo "<li data-role='list-divider'></li>";
+        } else {
+            if ($fila['activo'] == 1) {
+                $activo = "Activado";
+            } else {
+                $activo = "Desactivado";
+            }
+            if (empty($identificador_tema)) {
+                echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                echo "<li>";
+                echo "<a href='#'>";
+                echo "<h3>" . $fila['frase'] . "</h3>";
+                echo "<p><strong>" . $fila['frase_traducida'] . "</strong></p>";
+                echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "  | El tema se encuentra " . $activo . "</strong></p>";
+                echo "</a>";
+                $flag = $fila['id'];
+                echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                echo "</li>";
+                echo "<li data-role='list-divider'></li>";
+                $identificador_tema = $fila['nombre_tema'];
+            } else {
+                if ($identificador_tema == $fila['nombre_tema']) {
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['frase'] . "</h3>";
+                    echo "<p><strong>" . $fila['frase_traducida'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "  | El tema se encuetra " . $activo . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                } else {
+                    echo "<li data-role='list-divider'>" . $fila['nombre_tema'] . "<span class='ui-li-count'>" . $fila['id'] . "</span></li>";
+                    echo "<li>";
+                    echo "<a href='#'>";
+                    echo "<h3>" . $fila['frase'] . "</h3>";
+                    echo "<p><strong>" . $fila['frase_traducida'] . "</strong></p>";
+                    echo "<p class='ui-li-aside'><strong>" . $fila['ultima_fecha'] . "  | El tema se encuetra " . $activo . "</strong></p>";
+                    echo "</a>";
+                    $flag = $fila['id'];
+                    echo "<a href=\"edita_frase.php?bandera= $flag\">Editar Frase</a>";
+                    echo "</li>";
+                    echo "<li data-role='list-divider'></li>";
+                    $identificador_tema = $fila['nombre_tema'];
+                }
+            }
+        }
+    }
+}
+?>                     
                         </ul>
                     </div>                           
                     <div data-role="collapsible" data-collapsed="true">
                         <h3>Portuguese - English</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">                      
                             <?php
-                            
                             $sql10 = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 3 order by a.tema_id, a.ultima_fecha asc";
                             $result = $bd->ejecutar($sql10);
                             $num_rows = mysqli_num_rows($result);
@@ -393,8 +397,8 @@
 
                                 #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
                                 foreach ($result as $fila) {
-                                        
-                                    } {
+                                    
+                                } {
                                     if ($contador == $num_rows) {
                                         echo "<li data-role='list-divider'></li>";
                                     } else {
