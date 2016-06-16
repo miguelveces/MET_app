@@ -15,13 +15,16 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
+         require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';
+        $bd = ConexionDB::getInstance();
         $id_practica= strip_tags($_POST['var']);
         $frase = strip_tags($_POST['frases']);               
        
         
-       $update = 'UPDATE mylittlemagicbook.practica2 SET  acomoda_frase = \''.$frase.'\', fecha = sysdate() WHERE id = '.$id_practica.';';
-            $meter = @mysql_query($update);
+       $update = 'UPDATE mantenedor.practica2 SET  acomoda_frase = \''.$frase.'\', fecha = sysdate() WHERE id = '.$id_practica.';';
+            $meter = $bd->ejecutar($update);
             if ($meter) {
                 echo '<script>  alert("Se insertaron los registros con exito");window.location="../../examen.php"</script>';
             } else {               

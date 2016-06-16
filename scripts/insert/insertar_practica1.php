@@ -15,30 +15,33 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
-
+        require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';
+        $bd = ConexionDB::getInstance();
 
 //Recibir
-        $libro = strip_tags($_POST['id_padre']);       
+        $libro = strip_tags($_POST['id_padre']);
         $tema = strip_tags($_POST['id_hija']);
-        $pregunta = strip_tags($_POST['fr']);       
+        $pregunta = strip_tags($_POST['fr']);
         //$fecha = 
         $respuesta1 = strip_tags($_POST['respuesta1']);
         $respuesta2 = strip_tags($_POST['respuesta2']);
-        $respuesta3 = strip_tags($_POST['respuesta3']);        
-      
-            $insert = 'INSERT INTO mylittlemagicbook.practica '.
-                    '(libro_id, tema_id, pregunta, respuesta1, respuesta2, respuesta3, fecha) '.
-                    'VALUES ('.$libro.', '.$tema.', \''.$pregunta.'\', \''.$respuesta1.'\', \''.$respuesta2.'\','.
-                    ' \''.$respuesta3.'\', sysdate());';
-            $meter = @mysql_query($insert);
-            if ($meter) {
-               
-                echo '<script>  alert("Se insertaron los registros con exito");window.location="../../examen.php"</script>';
-            } else {
-                echo '<script>  alert("Error! revise los datos");window.location="../../examen.php"</script>';
-            }
-             
+        $respuesta3 = strip_tags($_POST['respuesta3']);
+
+        $insert = 'INSERT INTO mantenedor.practica ' .
+                '(libro_id, tema_id, pregunta, respuesta1, respuesta2, respuesta3, fecha) ' .
+                'VALUES (' . $libro . ', ' . $tema . ', \'' . $pregunta . '\', \'' . $respuesta1 . '\', \'' . $respuesta2 . '\',' .
+                ' \'' . $respuesta3 . '\', sysdate());';
+        $meter = $bd->ejecutar($insert);
+       
+        if ($meter) {
+
+            echo '<script>  alert("Se insertaron los registros con exito");window.location="../../examen.php"</script>';
+        } else {
+            echo '<script>  alert("Error! revise los datos");window.location="../../examen.php"</script>';
+        }
+
 //}        
         ?>
     </body>

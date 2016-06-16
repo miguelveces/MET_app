@@ -15,7 +15,11 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
+        /* Incluimos el fichero de la de cnexion a base de dats */
+        require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';         
+        $bd = ConexionDB::getInstance();
 
 
 //Recibir
@@ -44,19 +48,16 @@
                     'frase, audio_frase, ultima_fecha, activo, frase_traducida) VALUES (' . $libro . ', ' . $idioma . ' , ' . $tema . ',' .
                     ' \'' . $frase . '\', \'' . $audio . '\', sysdate(), ' . $activa . ', \'' . $traduccion . '\');';
 
-            $meter = @mysql_query($insert);
+            $meter = $bd->ejecutar($insert);
             if ($meter) {
                 echo $insert;
-               // echo '<script>  alert("Se insertaron los registros con exito");window.location="../../principal.php"</script>';
+              echo '<script>  alert("Se insertaron los datos correctamente!");window.location="../../principal.php"</script>';
             } else {
+                echo '<script>  alert("Error! verificar los datos a insertar");window.location="../../principal.php"</script>';
                 echo 'Hubo un error en al intentar registrar los campos.';
                 echo $insert;
             }
-       // } else {
-          //  echo '<script>  alert("El audio seleccionado pesa demaciado!!");window.location="../../principal.php"</script>';
-           // throw new UploadException($_FILES['file']['error']);
-       //}      
-//}        
+      $bd->cerrarConexion();
         ?>
     </body>
 </html>

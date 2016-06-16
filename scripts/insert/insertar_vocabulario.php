@@ -19,18 +19,18 @@
         require '../NuevaConexion/ConexionDB.php';
         /* Incluimos el fichero de la clase Conf */
         require '../NuevaConexion/Conf.php';
-       
+
         //Recibir
         $libro = strip_tags($_POST['id_padre']);
         $tema = strip_tags($_POST['id_hija']);
         $palabra = strip_tags($_POST['palabra']);
         $palabraT = strip_tags($_POST['palabraT']);
-$bd = ConexionDB::getInstance();
+        $bd = ConexionDB::getInstance();
 
         $insert = "INSERT INTO mantenedor.vocabularios(id_libro, id_tema, palabra, traduccion, fecha_modificacion)" .
                 "VALUES (" . $libro . ", " . $tema . ", '" . $palabra . "', '" . $palabraT . "', sysdate());";
 
-        $meter =  $bd->ejecutar($insert);
+        $meter = $bd->ejecutar($insert);
         if ($meter) {
             echo '<script>  alert("Se insertaron los datos correctamente!");window.location="../../vocabulario.php"</script>';
         } else {

@@ -53,18 +53,6 @@
                             /* Creamos la instancia del objeto. Ya estamos conectados */
                             $bd = ConexionDB::getInstance();
 
-
-//                            include "scripts/conexion/conexion.php";
-//                            if (!$conexion) {
-//                                die('No se puede conectar: ' . mysql_error());
-//                            }
-//
-                            //                          error_reporting(E_ERROR | E_WARNING | E_PARSE);
-//                            // Conexión a la BD
-//                            // Obtener el $id_padre del envio a si mismo del formulario ..
-                            //  $id_padre = $_POST['id_padre'];
-                            // Inicio Formulario .. PHP_SELF enviamos a si mismo (a este script).
-                            //echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"POST\">\n\n";
                             echo " <li data-role=\"fieldcontain\">\n";
                             echo " <label for=\"id_padre\" class=\"select\">Escoja el Libro:</label>\n";
                             // Formar Selec "Padre".
@@ -92,7 +80,7 @@
                             echo "</select>\n\n";
                             echo "</li>";
                             mysqli_free_result($stmt); // Liberar memoria usada por consulta.
-                            // Formar Select "Hijo"
+                            
                             echo " <li data-role=\"fieldcontain\">\n";
                             echo " <label for=\"id_hija\" class=\"select\">Escoja el tema:</label>\n";
                             echo "<select id=\"id_hija\" name=\"id_hija\">\n";
@@ -114,14 +102,6 @@
                                         echo "<option value=\"" . $row_hija['id'] . "\">" . $row_hija['nombre_tema'] . "</option>\n";
                                     }
                                 }
-
-//                                if (mysql_num_rows($consulta_hija) != 0) {
-//                                    While ($registro_hija = mysql_fetch_assoc($consulta_hija)) {
-//                                        echo "<option value=\"" . $registro_hija['id'] . "\">" . $registro_hija['nombre_tema'] . "</option>\n";
-//                                    }
-//                                } else {
-//                                    echo "<option value=\"\"> " . $SQLconsulta_hija . " </option>";
-//                                }
                             } else {
                                 echo "<option value=\"\"> Seleccione un tema  </option>";
                             }
@@ -129,18 +109,6 @@
                             echo "</select>\n\n";
                             // echo "</form>\n";
                             echo "</li>";
-
-
-                            // $consulta_padre = mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
-//                            While ($registro_padre = mysql_fetch_assoc($consulta_padre)) {
-//                                // Se mira si el ID del registro es el mismo q el $id_padre q recibimos si hemos cambiado el select hijo.
-//                                // Se selecciona en consecuencia (selected) la opción elegida.
-//                                if ($id_padre == $registro_padre['id']) {
-//                                    echo "<option value=\"" . $registro_padre['id'] . "\" selected>" . $registro_padre['nombre_libro'] . "</option>\n";
-//                                } else {
-//                                    echo "<option value=\"" . $registro_padre['id'] . "\">" . $registro_padre['nombre_libro'] . "</option>\n";
-//                                }
-//                            }
                             ?>
 
 
@@ -266,20 +234,20 @@
                         <h3>English - Spanich</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">
                             <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 5 order by a.tema_id, a.ultima_fecha asc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
+                             
+                            
+                            $sql8 = "select a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 1 order by a.tema_id, a.ultima_fecha asc";
+                            $result = $bd->ejecutar($sql8);
+                            $num_rows = mysqli_num_rows($result);
                             $contador = 0;
                             $identificador_tema = "";
                             if (!$result) {
                                 echo " fallo al momento de hacer la consulta";
                             } else {
                                 #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
+                               foreach ($result as $fila) {
+                                        
+                                    } {
                                     if ($contador == $num_rows) {
                                         echo "<li data-role='list-divider'></li>";
                                     } else {
@@ -332,7 +300,7 @@
                                     }
                                 }
                             }
-                            include "scripts/conexion/cerrar_conexion.php";
+                            
                             ?>                     
                         </ul>                  
                     </div>  
@@ -340,20 +308,19 @@
                         <h3>Chinese - English</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">                      
                             <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 6 order by a.tema_id, a.ultima_fecha asc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
+                            
+                            $sql = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 2 order by a.tema_id, a.ultima_fecha asc";
+                            $result = $bd->ejecutar($sql);
+                            $num_rows = mysqli_num_rows($result);
                             $contador = 0;
                             $identificador_tema = "";
                             if (!$result) {
                                 echo " fallo al momento de hacer la consulta";
                             } else {
                                 #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
+                                foreach ($result as $fila) {
+                                        
+                                    } {
                                     if ($contador == $num_rows) {
                                         echo "<li data-role='list-divider'></li>";
                                     } else {
@@ -406,7 +373,7 @@
                                     }
                                 }
                             }
-                            include "scripts/conexion/cerrar_conexion.php";
+                            
                             ?>                     
                         </ul>
                     </div>                           
@@ -414,13 +381,10 @@
                         <h3>Portuguese - English</h3>
                         <ul data-role="listview" data-theme="d" data-divider-theme="d">                      
                             <?php
-                            include "scripts/conexion/conexion.php";
-                            if (!$conexion) {
-                                die('No se puede conectar: ' . mysql_error());
-                            }
-                            $sql = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 7 order by a.tema_id, a.ultima_fecha asc";
-                            $result = @mysql_query($sql, $conexion);
-                            $num_rows = mysql_num_rows($result);
+                            
+                            $sql10 = "select  a.id, b.nombre_tema, a.frase, a.ultima_fecha, a.frase_traducida, a.activo from frases a, temas b where a.tema_id = b.id and a.libro_id = 3 order by a.tema_id, a.ultima_fecha asc";
+                            $result = $bd->ejecutar($sql10);
+                            $num_rows = mysqli_num_rows($result);
                             $contador = 0;
                             $identificador_tema = "";
                             if (!$result) {
@@ -428,7 +392,9 @@
                             } else {
 
                                 #echo "<select name='select-choice-a' id='select-choice-a' data-native-menu='false' >";
-                                while ($fila = mysql_fetch_array($result)) {
+                                foreach ($result as $fila) {
+                                        
+                                    } {
                                     if ($contador == $num_rows) {
                                         echo "<li data-role='list-divider'></li>";
                                     } else {
@@ -481,7 +447,7 @@
                                     }
                                 }
                             }
-                            include "scripts/conexion/cerrar_conexion.php";
+                            $bd->cerrarConexion();
                             ?>                     
                         </ul>
                     </div>                           

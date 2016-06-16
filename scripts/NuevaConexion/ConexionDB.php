@@ -52,11 +52,16 @@ class ConexionDB {
 
     private function conectar() {
         $this->link = mysqli_connect($this->servidor, $this->usuario, $this->password);
-        echo $this->base_datos;
+       // echo $this->base_datos;
         mysqli_select_db($this->link, $this->base_datos);
         mysqli_query($this->link, "SET NAMES 'utf8'");
     }
-
+    /*Metodo para desconectar la base de datos*/
+    public function cerrarConexion(){
+        mysqli_close($this->link);
+    }
+            
+    
     /* Método para ejecutar una sentencia sql */
 
     public function ejecutar($sql) {

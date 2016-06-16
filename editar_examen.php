@@ -39,20 +39,24 @@
                 <h2 cass="centro">Editar Prguntas para escojer la mejor respuesta</h2>
                 <div data-role="collapsible-set" data-theme="b" data-content-theme="d">
                     <?php
-                    include "scripts/conexion/conexion.php";
+                    /* Incluimos el fichero de la de cnexion a base de dats */
+                    require 'scripts/NuevaConexion/ConexionDB.php';
+                    /* Incluimos el fichero de la clase Conf */
+                    require 'scripts/NuevaConexion/Conf.php';
+
+                    $bd = ConexionDB::getInstance();
                     $id_libro = strip_tags($_POST['id_padre']);
                     $id_tema = strip_tags($_POST['id_hija']);
-                    if (!$conexion) {
-                        die('No se puede conectar: ' . mysql_error());
-                    }
+                    
                     $sql = "select id, pregunta, respuesta1, respuesta2, respuesta3 from practica " .
                             " where libro_id = " . $id_libro . " and tema_id = " . $id_tema . "";
-                    $result = @mysql_query($sql, $conexion);
+                    
+                    $result = $bd->ejecutar($sql);
                     if (!$result) {
                         echo " fallo al momento de hacer la consulta";
                     } else {
 
-                        while ($fila = mysql_fetch_array($result)) {
+                         foreach ($result as $fila){
 
                             echo"<form data-ajax = \"false\" method = \"POST\" enctype = \"multipart/form-data\">";
                             echo"<div data-role = \"collapsible\">";
@@ -90,19 +94,15 @@
 
                 <div data-role="collapsible-set" data-theme="b" data-content-theme="d">
                     <?php
-                    include "scripts/conexion/conexion.php";
-
-                    if (!$conexion) {
-                        die('No se puede conectar: ' . mysql_error());
-                    }
-                    $sql = "select id, acomoda_frase from practica2" .
+                   $bd2 = ConexionDB::getInstance();
+                    $sql2 = "select id, acomoda_frase from practica2" .
                             " where libro_id = " . $id_libro . " and tema_id = " . $id_tema . "";
-                    $result2 = @mysql_query($sql, $conexion);
+                    $result2 = $bd2->ejecutar($sql2);
                     if (!$result2) {
                         echo " fallo al momento de hacer la consulta";
                     } else {
 
-                        while ($fila2 = mysql_fetch_array($result2)) {
+                         foreach ($result2 as $fila2){
 
                             echo"<form data-ajax = \"false\" method = \"POST\" enctype = \"multipart/form-data\">";
                             echo"<div data-role = \"collapsible\">";

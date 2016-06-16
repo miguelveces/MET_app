@@ -15,25 +15,26 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
-        $id_practica= strip_tags($_POST['flag']);
-        $pregunta = strip_tags($_POST['pregunta']);               
+        require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';
+        $bd = ConexionDB::getInstance();
+        $id_practica = strip_tags($_POST['flag']);
+        $pregunta = strip_tags($_POST['pregunta']);
         $respesta1 = strip_tags($_POST['respuesta1']);
         $respesta2 = strip_tags($_POST['respuesta2']);
         $respesta3 = strip_tags($_POST['respuesta3']);
-        
-       $update = 'UPDATE mylittlemagicbook.practica SET  pregunta = \''.$pregunta.'\', '.
-               ' respuesta1 = \''.$respesta1.'\', respuesta2 = \''.$respesta2.'\', respuesta3 = \''.$respesta3.'\', fecha = sysdate()  WHERE id =  '.$id_practica.';';
-            $meter = @mysql_query($update);
-            if ($meter) {
-                
-                echo '<script>  alert("Se insertaron los registros con exito");window.location="../../examen.php"</script>';
-            } else {
-                //echo $update;
-                echo '<script> alert("Hubo un error en al intentar registrar los campos.");window.location="../../examen.php" </script>';
-                
-            }
-        
- ?>
+
+        $update = 'UPDATE mantenedor.practica SET  pregunta = \'' . $pregunta . '\', ' .
+                ' respuesta1 = \'' . $respesta1 . '\', respuesta2 = \'' . $respesta2 . '\', respuesta3 = \'' . $respesta3 . '\', fecha = sysdate()  WHERE id =  ' . $id_practica . ';';
+        $meter = $bd->ejecutar($update);
+        if ($meter) {
+
+            echo '<script>  alert("Se insertaron los registros con exito");window.location="../../examen.php"</script>';
+        } else {
+            //echo $update;
+            echo '<script> alert("Hubo un error en al intentar registrar los campos.");window.location="../../examen.php" </script>';
+        }
+        ?>
     </body>
 </html>

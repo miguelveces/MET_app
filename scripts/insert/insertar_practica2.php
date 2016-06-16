@@ -15,8 +15,10 @@
     <body>
 
         <?php
-        require_once('../conexion/conexion.php');
-
+        require '../NuevaConexion/ConexionDB.php';
+        /* Incluimos el fichero de la clase Conf */
+        require '../NuevaConexion/Conf.php';
+        $bd = ConexionDB::getInstance();
 
 //Recibir
         $libro = strip_tags($_POST['id_padre']);       
@@ -28,7 +30,7 @@
             $insert = 'INSERT INTO mantenedor.practica2 '.
                     '(libro_id, tema_id, acomoda_frase, fecha) '.
                     ' VALUES ('.$libro.', '.$tema.', \''.$frase.'\', sysdate());';
-            $meter = @mysql_query($insert);
+            $meter = $bd->ejecutar($insert);
             if ($meter) {
                 echo '<script>  alert("Se insertaron los datos para ordenar frases!");window.location="../../examen.php"</script>';
             } else {
