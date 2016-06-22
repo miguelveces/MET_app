@@ -49,8 +49,8 @@ class RestFullAPI {
         if ($_GET['action'] == 'libros') {
             $db = new GetLibros();
             if (isset($_GET['id'])) {//muestra 1 solo registro si es que existiera ID                 
-                $response = $db->getLibros($_GET['id']);
-                echo json_encode($response, JSON_PRETTY_PRINT);
+               $response = $db->getLibros($_GET['id']);
+               echo json_encode($response, JSON_PRETTY_PRINT);
             } else { //muestra todos los registros                   
                 $response = $db->getLibros();
                 echo json_encode($response, JSON_PRETTY_PRINT);
