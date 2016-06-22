@@ -43,16 +43,20 @@
                             <h3>Ingresar datos para escojer la mejor respuesta</h3>
                             <ul data-role="listview">
                                 <?php
+                                //Inicio la sesión
+                                session_start();
+                                //COMPRUEBA QUE EL USUARIO ESTA AUTENTICADO
+                                if ($_SESSION["logged"] != "yes") {
+                                    //si no existe, va a la página de autenticacion
+                                    echo '<script>window.location="index.php"</script>';
+                                    //salimos de este script
+                                    exit();
+                                }
                                 require 'scripts/NuevaConexion/ConexionDB.php';
                                 /* Incluimos el fichero de la clase Conf */
                                 require 'scripts/NuevaConexion/Conf.php';
                                 $bd = ConexionDB::getInstance();
-                                
                                 // Obtener el $id_padre del envio a si mismo del formulario ..
-                               
-
-
-
                                 // Inicio Formulario .. PHP_SELF enviamos a si mismo (a este script).
                                 //echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"POST\">\n\n";
                                 echo " <li data-role=\"fieldcontain\">\n";
@@ -62,9 +66,9 @@
                                 echo "<option value=\"\"> Seleccione un Libro </option>\n";
 
                                 $SQLconsulta_padre = "select id, nombre_libro from libros";
-                                $consulta_padre = $bd->ejecutar($SQLconsulta_padre);//mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
-                                     $id_padre = $_POST['id_padre'];
-                                  foreach ($consulta_padre as $registro_padre){
+                                $consulta_padre = $bd->ejecutar($SQLconsulta_padre); //mysql_query($SQLconsulta_padre, $conexion) or die(mysql_error());
+                                $id_padre = $_POST['id_padre'];
+                                foreach ($consulta_padre as $registro_padre) {
                                     // Se mira si el ID del registro es el mismo q el $id_padre q recibimos si hemos cambiado el select hijo.
                                     // Se selecciona en consecuencia (selected) la opción elegida.
                                     if ($id_padre == $registro_padre['id']) {
@@ -86,10 +90,10 @@
                                 if (!empty($id_padre)) {
 
                                     $SQLconsulta_hija = "select id, nombre_tema from temas where libro_id = '$id_padre' order by 2";
-                                    $consulta_hija = $bd->ejecutar($SQLconsulta_hija);//mysql_query($SQLconsulta_hija, $conexion) or die(mysql_error());
+                                    $consulta_hija = $bd->ejecutar($SQLconsulta_hija); //mysql_query($SQLconsulta_hija, $conexion) or die(mysql_error());
                                     // se mira el total de registros de la consulta .. si es 0 se muestra mensaje en el select ..
                                     if (mysqli_num_rows($consulta_hija) != 0) {
-                                         foreach ($consulta_hija as $registro_hija) {
+                                        foreach ($consulta_hija as $registro_hija) {
                                             echo "<option value=\"" . $registro_hija['id'] . "\">" . $registro_hija['nombre_tema'] . "</option>\n";
                                         }
                                     } else {
