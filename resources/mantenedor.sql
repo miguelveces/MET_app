@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-06-2016 a las 02:35:50
+-- Tiempo de generación: 22-06-2016 a las 17:23:49
 -- Versión del servidor: 5.7.11
 -- Versión de PHP: 5.6.19
 
@@ -69,7 +69,7 @@ CREATE TABLE `libros` (
 INSERT INTO `libros` (`id`, `cod_libro`, `nombre_libro`, `descripcion`) VALUES
 (1, 'engspa', 'English - Spanish', 'describe los temas relacionados a hotel'),
 (2, 'spaeng', 'Spanish - English', 'contiene los temas relacionados a Aoropuertos.'),
-(3, 'japeng', 'Japan - English', 'Temas relacionados a Hospital');
+(3, 'japeng', 'Portugues - English', 'Temas relacionados a Hospital');
 
 -- --------------------------------------------------------
 
@@ -145,7 +145,8 @@ INSERT INTO `temas` (`id`, `libro_id`, `idioma_id`, `nombre_tema`, `descripcion_
 (5, 3, NULL, 'Hospital 1', NULL, NULL),
 (6, 3, NULL, 'Hospital 2', NULL, NULL),
 (7, 1, 2, 'ni hotel', 'este es mi hotel', '2016-06-07 21:55:11'),
-(8, 1, 2, 'hospital', 'mi hosital', '2016-06-10 18:40:55');
+(8, 1, 2, 'hospital', 'mi hosital', '2016-06-10 18:40:55'),
+(9, 2, 2, 'dasd', 'asd', '2016-06-22 12:20:49');
 
 -- --------------------------------------------------------
 
@@ -268,7 +269,7 @@ ALTER TABLE `practica2`
 -- AUTO_INCREMENT de la tabla `temas`
 --
 ALTER TABLE `temas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
