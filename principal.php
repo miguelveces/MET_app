@@ -50,7 +50,11 @@
                             //COMPRUEBA QUE EL USUARIO ESTA AUTENTICADO
                             if ($_SESSION["logged"] != "yes") {
                                 //si no existe, va a la página de autenticacion
-                                  echo '<script>window.location="index.php"</script>';
+                                //
+                                //
+                                //
+                                //
+                                  //echo '<script>window.location="index.php"</script>';
                                  //salimos de este script
                                 exit();
                             }
